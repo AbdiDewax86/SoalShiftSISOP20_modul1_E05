@@ -1,1 +1,3 @@
-# Soal Shift Sistem Operasi 2020 - Kelompok E5
+# SoalShiftSISOP20_modul1_E05
+### Soal 1
+Code:
