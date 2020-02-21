@@ -1,6 +1,7 @@
 #!/bin/bash
 
 filename=$1 # mengambil argument pertama sbg nama file
+filename=${filename%%.*} # menghilangkan extensi txt
 jam=$(date +"%k") # mengambil jam sekarang dalam bentuk int
 
 for ((x=1; x<=jam; x++))
