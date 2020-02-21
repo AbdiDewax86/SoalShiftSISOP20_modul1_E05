@@ -82,3 +82,46 @@ for (i in arr) {
 ```
 Dari soal 1b, diketahui bahwa dua state dengan profit paling sedikit adalah Texas dan Illinois, maka kedua state tersebut dijadikan kondisi untuk pengelompokan selanjutnya. Pengelompokan selanjutnya berdasarkan produk, lalu di print profit dan produk sesuai hasilnya. Code ini menampilkan produk dengan profit terendah dari kedua state.
 
+## Soal 2
+#### Code untuk Encrypt (a,b,c):
+```
+#!/bin/bash
+
+filename=$1 # mengambil argument pertama sbg nama file
+filename=${filename%%.*} # menghilangkan extensi txt
+jam=$(date +"%k") # mengambil jam saat ini
+
+for ((x=1; x<=jam; x++))
+do
+ 	filename=$(echo "$filename" | tr '[A-Za-z]' '[B-ZAb-za]') 
+	# iterasi sebanyak jam dan lakukan pergeseran sebesar 1 tiap iterasi
+done
+
+cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 28 | head -n 1 > "$filename.txt" # memasukkan random string sepanjang 28 karakter ke file
+```
+Dalam code enkripsi ini, yang pertama dilakukan adalah mengambil argumen pertama sebagai nama file, dan menghilangkan ekstensi txt untuk sementara.
+Untuk menetukan berapa banyak shift yang dilakukan, maka diambil jam saat file tersebut dibuat dengan command date.
+Untuk enkripsi, dilakukan loop dan tr setiap kali loop. Loop diulang sebanyak jam, dan setiap loop dilakukan pergeseran 1 huruf, sehingga tergeser sebanyak nilai jam setelah loop selesai.
+Untuk mengisi file txt dengan random string, digunakan /dev/urandom. Command tr digunakan untuk menspesifikasi agar string dalam bentuk alphanumeric. Fold dilakukan untuk membuat enter setiap 28 huruf, sehingga nantinya random string bisa diambil baris pertama menggunakan head. Setelah itu, hasil random string dimasukkan ke file
+
+#### Code untuk Decrypt
+```
+#!/bin/bash
+
+filename=$1 # mengambil argument pertama sbg nama file
+jam=$(date -r $filename +"%k") # mengambil last modified hour dari file
+filename2="${filename%%.*}" # nama file 2 untuk nama file yang akan disimpan
+
+for ((x=1; x<=26-jam; x++))
+do
+ 	filename2=$(echo "$filename2" | tr '[A-Za-z]' '[B-ZAb-za]') 
+	#iterasi sebanyak 26-jam, agar cycle keseluruhan menjadi 26(encrypt+decrypt), sehingga 		nama file kembali ke nama awal
+done
+
+cat "$filename" > "$filename2.txt" # masukkan isi string ke decrypted file
+```
+Code dekripsi ini hampir sama dengan enkripsi, dengan perbedaan di jam, loop, dan pengisian file txt.
+Setelah didapat nama file, disimpan lagi ke variabel lain tanpa ekstensi txt. Ini bertujuan untuk menyimpan nama file asal dan nama file tujuan.
+Jam didapat dari jam terakhir suatu file diubah (last modified hour). Hasil tersebut lalu dipakai untuk loop, yaitu dengan cara 26-jam, agar didapat pergeseran yang harus dilakukan agar terjadi 1 kali cycle, sehingga nama file kembali ke semula.
+Terakhir, command cat dipanggil untuk mendapatkan isi file enkripsi dan mengisi file yang telah di dekrip.
+
