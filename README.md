@@ -158,3 +158,10 @@ do
 done
 ```
 Hal yang pertama kali dilakukan dalam code ini adalah mencari index dari gambar terakhir duplicate dan kenangan dan menyimpannya ke suatu variabel. Kedua variabel tersebut digunakan untuk melanjutkan index jika gambar dipindah ke duplicate dan kenangan. Di dalam loop, didownload file dengan wget, dan disimpan dengan nama pdkt_kusuma_index dan log disimpan ke wget.log dan diappend ke log.bak. Wget.log di awk ke locationfull, yang meyimpan log file yang baru saja didownload, sehingga location gambar tersebut bisa diambil dan dibandingkan dengan location lain. Location gambar yang baru saja didownload disimpan di temploc, dan location gambar yang sudah didownload di simpan di location.txt, dan digrep dengan greploc. Jika sudah pernah didownload, maka greploc akan menyimpan lokasi download. Dalam kondisi, dibandingkan temploc dengan greploc. Jika temploc dan greploc sama, maka terdapat duplicate. Variabel dupe (counter untuk duplicate) diincrement, dan dijadikan index selanjutnya untuk duplicate, dan file pdkt_kusuma_i dipindah ke folder duplicate dan direname. Jika tidak sama, maka tidak terjadi duplicate. Variabel kenangan (counter untuk kenangan) diincrement, dan dijadikan index kenangan. File pdkt_kusuma_2 lalu dipindah ke folder kenangan dan direname
+
+#### Cronjob
+Untuk cronjob, command yang dilakukan adalah sebagai berikut
+```
+ 5 6-23/8 * * 0-5 "/home/jiahstrike/Sisop/soal/Modul 1/3/soal3.sh"
+```
+Command ini akan mengeksekusi script tiap menit ke 5, tiap 8 jam setelah jam 6, dan setiap hari dalam seminggu kecuali hari Sabtu
