@@ -1,6 +1,6 @@
 # SoalShiftSISOP20_modul1_E05
 ## Soal 1
-###### Code:
+#### Code:
 ```
 #!/bin/bash
 
@@ -13,7 +13,7 @@ awk -f SM1soal1cCombined.awk Sample-Superstore.tsv | sort -g | head -n10 | awk '
 
 Soal no 1 memanggil semua file SC awk yang khusus untuk no. 1 a, b, dan c. Hasil dari ketiga code tersebut lalu di sort, dicari n hasil pertama, dan diprint hasilnya. Code untuk file awk adalah sebagai berikut:
 
-###### Code 1a:
+#### Code 1a:
 ```
 #!/bin/bash
 
@@ -37,7 +37,7 @@ Dalam file Sample-Superstore.tsv, Field Separator adalah tab, maka dilakukan FS=
 Dalam mencari nilai tiap region, dilakukan pengelompokan berdasarkan region dan penambahan nilai profit berdasarkan region ke dalam bentuk array. Kondisi NR!=1 dilakukan agar baris pertama "Region" tidak masuk ke dalam array.
 Setelah seluruh file dilalui, di print hasil profit dan nama region.
 
-###### Code 1b:
+#### Code 1b:
 ```
 #!/bin/bash
 
@@ -59,7 +59,7 @@ for (i in arr) {
 ```
 Dari soal 1a, diketahui bahwa region dengan profit paling sedikit adalah Central, maka region Central dijadikan kondisi untuk pengelompokan selanjutnya. Pengelompokan berdasarkan State, dan di print hasil profit dan state sesuai hasilnya.
 
-###### Code 1c:
+#### Code 1c:
 ```
 #!/bin/bash
 
@@ -80,5 +80,5 @@ for (i in arr) {
 	}
 }
 ```
-Dari soal 1b, diketahui bahwa dua sstate dengan profit paling sedikit adalah Texas dan Illinois, maka kedua state tersebut dijadikan kondisi untuk pengelompokan selanjutnya. Pengelompokan selanjutnya berdasarkan produk, lalu di print profit dan produk sesuai hasilnya. Code ini menampilkan produk dengan profit terendah dari kedua state.
+Dari soal 1b, diketahui bahwa dua state dengan profit paling sedikit adalah Texas dan Illinois, maka kedua state tersebut dijadikan kondisi untuk pengelompokan selanjutnya. Pengelompokan selanjutnya berdasarkan produk, lalu di print profit dan produk sesuai hasilnya. Code ini menampilkan produk dengan profit terendah dari kedua state.
 
