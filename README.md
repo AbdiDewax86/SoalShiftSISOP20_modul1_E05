@@ -88,21 +88,46 @@ Dari soal 1b, diketahui bahwa dua state dengan profit paling sedikit adalah Texa
 #!/bin/bash
 
 filename=$1 # mengambil argument pertama sbg nama file
-filename=${filename%%.*} # menghilangkan extensi txt
+filename=${filename%.*} # menghilangkan extensi txt
 jam=$(date +"%k") # mengambil jam saat ini
+# echo $filename | grep -q '[0-9.!@#$%^&*()]'
+if [[ "${filename}" =~ [^a-zA-Z] ]]; then
+	echo "Invalid input"
+else
+	for ((x=1; x<=jam; x++))
+	do
+ 		filename=$(echo "$filename" | tr '[A-Za-z]' '[B-ZAb-za]') 
+		# iterasi sebanyak jam dan lakukan pergeseran sebesar 1 tiap iterasi
+	done
 
-for ((x=1; x<=jam; x++))
-do
- 	filename=$(echo "$filename" | tr '[A-Za-z]' '[B-ZAb-za]') 
-	# iterasi sebanyak jam dan lakukan pergeseran sebesar 1 tiap iterasi
-done
-
-cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 28 | head -n 1 > "$filename.txt" # memasukkan random string sepanjang 28 karakter ke file
+	looper=1
+	while [ $looper==1 ]
+	do
+		string=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 28 | head -n 1)
+		echo $string | grep -q '[A-Z]'
+		if [ $? != 0 ]; then
+			continue
+		fi
+		echo $string | grep -q '[a-z]'
+		if [ $? != 0 ]; then
+			continue
+		fi
+		echo $string | grep -q '[0-9]'
+		if [ $? != 0 ]; then
+			continue
+		fi
+		echo $string > "$filename.txt"
+		break
+	done
+	# cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 25 | head -n 1 >> "$filename.txt" 
+	# memasukkan random string sepanjang 28 karakter ke file
+fi
 ```
 Dalam code enkripsi ini, yang pertama dilakukan adalah mengambil argumen pertama sebagai nama file, dan menghilangkan ekstensi txt untuk sementara.
+Nama file lalu dicek apakah hanya berisi alphabet. Jika terdapat karakter lain, maka file tidak akan terproses dan keluar "Invalid Input".
 Untuk menetukan berapa banyak shift yang dilakukan, maka diambil jam saat file tersebut dibuat dengan command date.
 Untuk enkripsi, dilakukan loop dan tr setiap kali loop. Loop diulang sebanyak jam, dan setiap loop dilakukan pergeseran 1 huruf, sehingga tergeser sebanyak nilai jam setelah loop selesai.
-Untuk mengisi file txt dengan random string, digunakan /dev/urandom. Command tr digunakan untuk menspesifikasi agar string dalam bentuk alphanumeric. Fold dilakukan untuk membuat enter setiap 28 huruf, sehingga nantinya random string bisa diambil baris pertama menggunakan head. Setelah itu, hasil random string dimasukkan ke file
+Untuk mengisi file txt dengan random string, digunakan /dev/urandom. Command tr digunakan untuk menspesifikasi agar string dalam bentuk alphanumeric. Fold dilakukan untuk membuat enter setiap 28 huruf, sehingga nantinya random string bisa diambil baris pertama menggunakan head. Hasil random string lalu dicek satu persatu apakah memiliki minimal 1 huruf besar, 1 huruf kecil, dan 1 angka. Jika tidak memiliki salah satu, maka akan dibuat string baru hingga memenuhi semua kondisi. Setelah itu, hasil random string dimasukkan ke file.
 
 #### Code untuk Decrypt
 ```
@@ -136,28 +161,29 @@ kenangan=$(find . -type f -name "*kenangan*" | wc -l)
 # echo $kenangan
 for ((i=1;i<=28;i++))
 do
-	wget https://loremflickr.com/320/240/cat -O "pdkt_kusuma_$i" -o "wget.log"
-	grep 'Location' "wget.log" > locationfull.txt
-	cat wget.log >> log.bak
+	/usr/bin/wget https://loremflickr.com/320/240/cat -O "/home/dimasadh/Documents/Praktikum1/soal3/pdkt_kusuma_$i" -o "/home/dimasadh/Documents/Praktikum1/soal3/wget.log"
+	grep 'Location' "/home/dimasadh/Documents/Praktikum1/soal3/wget.log" > /home/dimasadh/Documents/Praktikum1/soal3/locationfull.txt
+	cat /home/dimasadh/Documents/Praktikum1/soal3/wget.log >> /home/dimasadh/Documents/Praktikum1/soal3/log.bak
 
-	temploc="$(awk '{print $2}' locationfull.txt)"
+	temploc="$(awk '{print $2}' /home/dimasadh/Documents/Praktikum1/soal3/locationfull.txt)"
 	#echo $temploc
-	greploc=$(grep "$temploc" location.txt | head -n1)
+	greploc=$(grep "$temploc" /home/dimasadh/Documents/Praktikum1/soal3/location.txt | head -n1)
 	#echo $greploc
 	
 	if [ "$temploc" == "$greploc" ]
 	then
 		# echo "duplicate"
 		dupe=$((dupe+1))
-		mv "pdkt_kusuma_$i" "duplicate/duplicate_$dupe"
+		mv "/home/dimasadh/Documents/Praktikum1/soal3/pdkt_kusuma_$i" "/home/dimasadh/Documents/Praktikum1/soal3/duplicate/duplicate_$dupe"
 	else
-		awk '{print $2}' locationfull.txt >> location.txt
+		awk '{print $2}' /home/dimasadh/Documents/Praktikum1/soal3/locationfull.txt >> /home/dimasadh/Documents/Praktikum1/soal3/location.txt
 		kenangan=$((kenangan+1))
-		mv "pdkt_kusuma_$i" "kenangan/kenangan_$kenangan"
+		mv "/home/dimasadh/Documents/Praktikum1/soal3/pdkt_kusuma_$i" "/home/dimasadh/Documents/Praktikum1/soal3/kenangan/kenangan_$kenangan"
 	fi
 done
 ```
 Hal yang pertama kali dilakukan dalam code ini adalah mencari index dari gambar terakhir duplicate dan kenangan dan menyimpannya ke suatu variabel. Kedua variabel tersebut digunakan untuk melanjutkan index jika gambar dipindah ke duplicate dan kenangan. Di dalam loop, didownload file dengan wget, dan disimpan dengan nama pdkt_kusuma_index dan log disimpan ke wget.log dan diappend ke log.bak. Wget.log di awk ke locationfull, yang meyimpan log file yang baru saja didownload, sehingga location gambar tersebut bisa diambil dan dibandingkan dengan location lain. Location gambar yang baru saja didownload disimpan di temploc, dan location gambar yang sudah didownload di simpan di location.txt, dan digrep dengan greploc. Jika sudah pernah didownload, maka greploc akan menyimpan lokasi download. Dalam kondisi, dibandingkan temploc dengan greploc. Jika temploc dan greploc sama, maka terdapat duplicate. Variabel dupe (counter untuk duplicate) diincrement, dan dijadikan index selanjutnya untuk duplicate, dan file pdkt_kusuma_i dipindah ke folder duplicate dan direname. Jika tidak sama, maka tidak terjadi duplicate. Variabel kenangan (counter untuk kenangan) diincrement, dan dijadikan index kenangan. File pdkt_kusuma_2 lalu dipindah ke folder kenangan dan direname
+Full directory digunakan agar dapat dijalankan melalui crontab
 
 #### Cronjob
 Untuk cronjob, command yang dilakukan adalah sebagai berikut
