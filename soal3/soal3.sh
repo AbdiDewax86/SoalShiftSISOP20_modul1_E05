@@ -6,23 +6,23 @@ kenangan=$(find . -type f -name "*kenangan*" | wc -l)
 # echo $kenangan
 for ((i=1;i<=28;i++))
 do
-	wget https://loremflickr.com/320/240/cat -O "pdkt_kusuma_$i" -o "wget.log"
-	grep 'Location' "wget.log" > locationfull.txt
-	cat wget.log >> log.bak
+	/usr/bin/wget https://loremflickr.com/320/240/cat -O "/home/dimasadh/Documents/Praktikum1/soal3/pdkt_kusuma_$i" -o "/home/dimasadh/Documents/Praktikum1/soal3/wget.log"
+	grep 'Location' "/home/dimasadh/Documents/Praktikum1/soal3/wget.log" > /home/dimasadh/Documents/Praktikum1/soal3/locationfull.txt
+	cat /home/dimasadh/Documents/Praktikum1/soal3/wget.log >> /home/dimasadh/Documents/Praktikum1/soal3/log.bak
 
-	temploc="$(awk '{print $2}' locationfull.txt)"
+	temploc="$(awk '{print $2}' /home/dimasadh/Documents/Praktikum1/soal3/locationfull.txt)"
 	#echo $temploc
-	greploc=$(grep "$temploc" location.txt | head -n1)
+	greploc=$(grep "$temploc" /home/dimasadh/Documents/Praktikum1/soal3/location.txt | head -n1)
 	#echo $greploc
 	
 	if [ "$temploc" == "$greploc" ]
 	then
 		# echo "duplicate"
 		dupe=$((dupe+1))
-		mv "pdkt_kusuma_$i" "duplicate/duplicate_$dupe"
+		mv "/home/dimasadh/Documents/Praktikum1/soal3/pdkt_kusuma_$i" "/home/dimasadh/Documents/Praktikum1/soal3/duplicate/duplicate_$dupe"
 	else
-		awk '{print $2}' locationfull.txt >> location.txt
+		awk '{print $2}' /home/dimasadh/Documents/Praktikum1/soal3/locationfull.txt >> /home/dimasadh/Documents/Praktikum1/soal3/location.txt
 		kenangan=$((kenangan+1))
-		mv "pdkt_kusuma_$i" "kenangan/kenangan_$kenangan"
+		mv "/home/dimasadh/Documents/Praktikum1/soal3/pdkt_kusuma_$i" "/home/dimasadh/Documents/Praktikum1/soal3/kenangan/kenangan_$kenangan"
 	fi
 done
