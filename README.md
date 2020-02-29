@@ -188,6 +188,6 @@ Full directory digunakan agar dapat dijalankan melalui crontab
 #### Cronjob
 Untuk cronjob, command yang dilakukan adalah sebagai berikut
 ```
- 5 6-23/8 * * 0-5 "/home/jiahstrike/Sisop/soal/Modul 1/3/soal3.sh"
+ 5 6-23/8 * * 0-5 "/home/dimasadh/Documents/Praktikum1/soal3/soal3.sh"
 ```
 Command ini akan mengeksekusi script tiap menit ke 5, tiap 8 jam setelah jam 6, dan setiap hari dalam seminggu kecuali hari Sabtu
